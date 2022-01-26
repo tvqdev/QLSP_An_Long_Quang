@@ -1,0 +1,139 @@
+@import url('https://fonts.googleapis.com/css2?family=Poppins:wght@200;300;400;500;600&display=swap');
+
+* {
+     padding: 0;
+     margin: 0;
+     box-sizing: border-box;
+     font-family: 'Poppins', sans-serif;
+}
+
+.container {
+     width: 85%;
+     margin: 0 auto;
+
+}
+
+header {
+     max-width: 100%;
+     background: black;
+     height: 60px;
+     display: flex;
+     align-items: center;
+     justify-content: space-evenly;
+}
+
+nav {
+     display: flex;
+}
+
+a i {
+     color: #fff;
+     font-size: 30px;
+}
+
+ul {
+     display: flex;
+     justify-content: center;
+     align-items: center;
+}
+
+ul li {
+     font-size: 20px;
+     list-style: none;
+}
+
+ul a {
+     text-decoration: none;
+     padding: 20px;
+     color: #fff;
+     font-style: italic;
+     text-transform: uppercase;
+     transition: all .5s;
+}
+
+ul a:hover {
+     color: darkorange;
+}
+
+
+/* product */
+.product {
+     padding: 20px;
+}
+.product-content {
+     display: flex;
+     flex-wrap: wrap;
+     gap: 19px;
+}
+.product-item {
+     background-color: white;
+     width: 300px;
+     /* height: 350px; */
+     
+     border-radius: 22px;
+     -webkit-box-shadow: 0px 10px 26px -10px rgba(0, 0, 0, 0.49);
+     -moz-box-shadow: 0px 10px 26px -10px rgba(0, 0, 0, 0.49);
+     box-shadow: 0px 10px 26px -10px rgba(0, 0, 0, 0.49);
+     transition: all .5s;
+     position: relative;
+}
+/* .product-item::before {
+     content: "";
+     position: absolute;
+     background: #fff;
+     width: 100%;
+     height: 100%;
+     top: 0;
+     left: 0;
+
+} */
+
+.product-item img {
+     width: 100%;
+     height: 300px;
+     object-fit: cover;
+     border-radius: 20px;
+}
+
+.product-title {
+     padding: 0 15px 15px;
+     transition: all .5s;
+}
+
+.product-name, .product-desc ,.product-price{
+     padding:2px 0;
+     display:-webkit-box;
+     -webkit-line-clamp:1;
+     -webkit-box-orient: vertical;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     word-break: break-word;
+}
+.product-name {
+     text-transform: uppercase;
+}
+.product-price {
+     margin-top: auto;
+     padding-bottom: 10px;
+     
+}
+.product-btn {
+     width: 100%;
+     background: black;
+     color: #fff;
+     border: none;
+     padding: 10px 0px;
+     border-radius: 20px;
+     cursor: pointer;
+     transition: all .5s;
+}
+.product-btn:hover {
+     background: rgba(255, 140, 0, 0.816);
+     color: black;
+     font-weight: 600;
+}
+
+
+
+
+
