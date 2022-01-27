@@ -9,7 +9,7 @@
 
      <!-- FONT GOOGLE -->
 
-     
+
      <!-- font-awesome -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
@@ -27,7 +27,9 @@
                     <li><a href="#">Contact</a></li>
                </ul>
           </nav>
-          <a href=""><i class="fab fa-opencart"></i></a>
+          <div class="cart-icon">
+               <i class="fab fa-opencart"></i>
+          </div>
      </header>
 
      <section class="product">
@@ -61,6 +63,50 @@
           </div>
      </section>
 
+     <section class="cart">
+          <div class="container">
+               <a href="#"><i class="fa fa-times"></i></a>
+               <h1>Shopping Cart</h1>
+               <form>
+                    <table>
+                         <thead>
+                              <tr>
+                                   <th>items</th>
+                                   <th>Quantity</th>
+                                   <th>Price</th>
+                                   <th></th>
+                              </tr>
+                         </thead>
+                         <tbody>
+                              <tr>
+                                   <td style="display: flex; align-items: center;"><img style="width: 70px;"
+                                             src="https://cdn.tgdd.vn/Products/Images/42/114115/iphone-x-64gb-hh-600x600.jpg"
+                                             alt="">Iphone X</td>
+                                   <td><input style="width: 30px; outline: none;" type="number" value="1" min="1"></td>
+                                   <td><span>$ 1000</span></td>
+                                   <td style="cursor: pointer;"><i class="fa fa-trash"></i></td>
+                              </tr>
+                              <tr>
+                                   <td style="display: flex; align-items: center;"><img style="width: 70px;"
+                                             src="https://cdn.tgdd.vn/Products/Images/42/217536/samsung-galaxy-m51-trang-new-600x600-600x600.jpg"
+                                             alt="">Samsung Galaxy M51</td>
+                                   <td><input style="width: 30px; outline: none;" type="number" value="1" min="1"></td>
+                                   <td><span>$ 35</span></td>
+                                   <td style="cursor: pointer;"><i class="fa fa-trash"></i></td>
+                              </tr>
+                         </tbody>
+                    </table>
+                    <div style="text-align: right;" class="price-total">
+                         <p style="font-weight: bold;">Total: <span>$ 1000</span></p>
+                    </div>
+                    <div class="cart-btn">
+                         <button>Purchase</button>
+                         <button>Clear Cart</button>
+                    </div>
+               </form>
+          </div>
+     </section>
+
      <footer>
 
      </footer>
@@ -68,6 +114,7 @@
      <!-- <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script> -->
      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
      <script src="../../models/QLSP.js"></script>
+     <script src="../home/js/maincart.js"></script>
      <script src="../../controllers/main.js"></script>
 </body>
 
