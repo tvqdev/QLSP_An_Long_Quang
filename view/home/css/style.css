@@ -27,7 +27,6 @@ nav {
 }
 
 a i {
-     color: #fff;
      font-size: 30px;
 }
 
@@ -55,6 +54,10 @@ ul a:hover {
      color: darkorange;
 }
 
+.cart-icon {
+     color: white;
+     cursor: pointer;
+}
 
 /* product */
 .product {
@@ -133,7 +136,72 @@ ul a:hover {
      font-weight: 600;
 }
 
+/* -----Cart------*/
+.cart{
+     position: fixed;
+     height: 100vh;
+     width: 40%;
+     right: 0;
+     top: 0;
+     background-color: rgb(246, 246, 246);
+     margin: auto;
+     text-align: center;
+     padding-top: 30px;
+     right: -100%;
+     transition: all .3s ease;
+}
 
+.cart h1{
+     margin-bottom: 30px;
+}
 
+.cart table {
+     width: 100%;
+}
+
+.cart table thead tr th:first-child{
+     text-align: left;
+}
+
+.cart table tr td {
+     border-bottom: 1px solid #ddd;
+     padding: 12px 0;
+}
+
+.cart table tbody tr td:last-child {
+     text-align: right;
+}
+
+.cart a {
+     position: absolute;
+     top: 20px;
+     right: 30px;
+     cursor: pointer;
+     text-decoration: none;
+     color: black;
+}
+
+.cart-btn {
+     /* display: flex;
+     justify-content: space-evenly; */
+     position: absolute;
+     align-self: flex-end;
+     flex-direction: column;
+     right: 7%;
+}
+
+.cart-btn button {
+     background-color: white;
+     padding: 10px 20px;
+     margin-top: 20px;
+     border-radius: 10px;
+     border: 1px solid;
+     cursor: pointer;
+     transition: .5s;
+}
+.cart-btn button:hover {
+     background-color: darkorange;
+     box-shadow: inset 20em 0 0 0 darkorange;
+}
 
 
