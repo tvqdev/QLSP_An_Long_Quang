@@ -4,7 +4,6 @@ function getDataUI() {
      sp.getDataProduct()
           .then(function (result) {
                hienThiDS(result.data);
-              // search(result.dataProduct)
           })
           .catch(function (error) {
                console.log(error);
@@ -40,10 +39,31 @@ function hienThiDS(mangSP) {
 
 }
 
+function onchangeSearch() {
+     var seach = document.getElementById("produc-sp").value;
+     let arr = [];
+     let arr2 = [];
+     sp.getDataProduct()
+          .then((result) => { 
+          arr = [...result.data];
+          arr.map((sp, index) => {
+               if (sp.type == seach) {
+                 arr2.push(arr[index]);
+               }
+          });
+          if (arr2.length == 0) {
+            arr2 = [...arr];
+            alert(`"không có ${seach}"`);
+          }
+    
+          hienThiDS(arr2);
+     }).catch((err) => {
+          console.log(err);
+     });
+}
+
 // Them sản phẩm vào giỏ hàng
 function addCart(id, soLuong) {
-     // alert("Bạn có muốn mua sản phẩm ?" + idsp)
-     // console.log(123);
      let cart = new Products()
      cart.id = id;
      cart.quantily = soLuong;
@@ -54,41 +74,3 @@ console.log(addCart('1', 20));
 
 
 
-
-// Lưu dữ liêu trên localStorage
-// function setLocalStorage(mang) {
-//      localStorage.setItem("DSSP", JSON.stringify(mang));
-// }
-
-// lấy dữ liệu từ localStorage
-// function getLocalStorage(mang) {
-//      if (localStorage.getItem("DSSP") != null) {
-//           sp.mangSP = JSON.parse(localStorage.getItem("DSSP"));
-//           hienThiDS(sp.mangSP);
-//      }
-// }
-
-
-
-
-
-
-// function search(id) {
-//      var dataProduct = [];
-//      sp.getDataSearch(id)
-//           .then(function (result) {
-//                var datas = result.data.type;
-//                console.log([result.data.type]);
-//                for (let i = 0; i < datas.length; i++) {
-//                     if (datas === "Iphone" || datas === "Samsung") {
-//                          dataProduct.push(datas[i]);
-//                hienThiDS(result.data);
-                         
-//                     }               
-//                }
-//                hienThiDS(result.data);
-//           })
-//           .catch(function (error) {
-//                console.log(error);
-//           });  
-// }

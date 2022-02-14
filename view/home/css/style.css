@@ -135,6 +135,12 @@ ul a:hover {
      color: black;
      font-weight: 600;
 }
+.product-seach {
+     padding: 20px;
+}
+select {
+     padding: 10px;
+}
 
 /* -----Cart------*/
 .cart{
