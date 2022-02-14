@@ -1,4 +1,6 @@
-let sp = new ProductService();
+var sp = new ProductService();
+var dataProduct = [];
+var dataCart = [];
 
 function getDataUI() {
      sp.getDataProduct()
@@ -44,32 +46,69 @@ function onchangeSearch() {
      let arr = [];
      let arr2 = [];
      sp.getDataProduct()
-          .then((result) => { 
-          arr = [...result.data];
-          arr.map((sp, index) => {
-               if (sp.type == seach) {
-                 arr2.push(arr[index]);
+          .then((result) => {
+               arr = [...result.data];
+               arr.map((sp, index) => {
+                    if (sp.type == seach) {
+                         arr2.push(arr[index]);
+                    }
+               });
+               if (arr2.length == 0) {
+                    arr2 = [...arr];
+                    alert(`"không có ${seach}"`);
                }
+               hienThiDS(arr2);
+          }).catch((err) => {
+               console.log(err);
           });
-          if (arr2.length == 0) {
-            arr2 = [...arr];
-            alert(`"không có ${seach}"`);
-          }
-          hienThiDS(arr2);
-     }).catch((err) => {
-          console.log(err);
+}
+
+function addCart(id) {
+     var find_Products = findProduct(id);
+     var productCart = {
+          ...dataProduct[find_Products]
+     };
+     console.log("product: ", productCart);
+
+     if (dataCart.some((pr) => {
+          if (pr.product.id == id)
+               return true;
+     })) {
+          dataCart.map((pr) => {
+               if (pr.product.id == id) pr.quantity++;
+          })
+     } else {
+          let productItem = new Cart(productCart);
+          dataCart.push(productItem);
+     }
+     console.log(dataCart);
+}
+
+function findProduct(id) {
+     var find_Product = -1;
+     dataProduct.map((pr, i) => {
+          if (pr.id == id) find_Product = i;
      });
+     return find_Product;
 }
 
-// Them sản phẩm vào giỏ hàng
-function addCart(id, soLuong) {
-     let cart = new Products()
-     cart.id = id;
-     cart.quantily = soLuong;
-     return cart;
-}
-console.log(addCart('1', 20));
 
-
-
-
+function Carts(mang) {
+     let content = "";
+     let count = 1;
+     mang.map(function (sp) {
+          content +=
+               `
+       <tr>
+               <td style="display: flex; align-items: center;"><img style="width: 70px;"
+                         src="${sp.product.img}"
+                         alt="">${sp.product.name}</td>
+               <td><input style="width: 30px; outline: none;" type="number" value="1" min="1"></td>
+               <td><span>$ ${sp.product.price}</span></td>
+               <td style="cursor: pointer;"><i class="fa fa-trash"></i></td>
+          </tr>
+         `;
+          count++;
+     });
+     document.querySelector("#tbody").innerHTML = content;
+};
