@@ -55,7 +55,6 @@ function onchangeSearch() {
             arr2 = [...arr];
             alert(`"không có ${seach}"`);
           }
-    
           hienThiDS(arr2);
      }).catch((err) => {
           console.log(err);
