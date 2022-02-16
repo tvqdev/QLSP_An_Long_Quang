@@ -13,11 +13,20 @@ window.getELE = getELE;
 
 
 let getListProducts=()=> {
-  productSer
-    .layDSSP()
+  productSer.layDSSP()
     .then( (result)=> {
-      console.log(result.data);
-      renderTable(result.data);
+       renderTable(result.data);
+    })
+    .catch( err=> {
+      console.log(err);
+    });
+}
+getListProducts();
+window.getListProducts = getListProducts;
+
+let setLocalStorage=()=>{
+  productSer.layDSSP().
+  then(result => {
       let DSSP = result.data;
       let mangDSSP = DSSP.map((sp) => {
         let infoProducts = {
@@ -35,8 +44,7 @@ let getListProducts=()=> {
     mangLocal = JSON.parse(localStorage.getItem("DSSP"));
   }
 }
-getListProducts();
-window.getListProducts = getListProducts;
+setLocalStorage();
 
 let creatBtnAdd=()=> {
   let footerEle = document.querySelector("#myModal .modal-footer");
@@ -50,20 +58,21 @@ let renderTable = mangSP => {
   mangSP.map((sp, index)=> {
     content += `
         <tr>
-            <td style='display:none'>${count}</td>          
+            <td>${count}</td>          
             <td>${sp.name}</td>
             <td>${sp.price}</td>
             <td>${sp.screen}</td>
             <td>
              <img style='width: 100px;' src='${sp.img}'></img> </td>
             <td>${sp.desc}</td>
+            <td>${sp.type}</td>
             <td>
-                <button class="btn btn-danger" onclick="deleteProduct('${count}')">Xóa</button>
+                <button class="btn btn-danger" onclick="deleteProduct('${sp.id}')">Xóa</button>
                 <button data-toggle="modal" data-target="#myModal" class="btn btn-primary" onclick="editProduct('${sp.id}')">Xem</button>
             </td>
         </tr>
         `;
-    count++;
+        count++;
   });
   getELE("tbodyProducts").innerHTML = content;
 }
@@ -124,7 +133,7 @@ let addProducts = () => {
   );
   isValid &=
     validation.checkEmpty(desc, "tbMoTa", "Bạn chưa viết mô tả") &&
-    validation.checkLength(desc, "tbMoTa", "Mô tả nhập quá 60 ký tự");
+    validation.checkLength(desc, "tbMoTa", "Mô tả nhập ít hơn 60 ký tự");
 
   if (isValid) {
     let sp = new Products(
@@ -142,6 +151,7 @@ let addProducts = () => {
       .themSP(sp)
       .then(() => {
         getListProducts();
+        setLocalStorage();
         document.querySelector("#myModal .close").click();
       })
       .catch((err) => {
@@ -156,6 +166,7 @@ let deleteProduct=id=> {
     .xoaSP(id)
     .then(() => {
       getListProducts();
+      setLocalStorage();
     })
     .catch( err=> {
       console.log(err);
@@ -164,6 +175,7 @@ let deleteProduct=id=> {
 window.deleteProduct = deleteProduct;
 
 let editProduct = id => {
+  setLocalStorage();
   productSer
     .xemSP(id)
     .then((result) => {
@@ -181,7 +193,7 @@ let editProduct = id => {
       getELE("loaiDT").value = type;
 
       document.querySelector("#myModal .modal-footer").innerHTML = `
-        <button class='btn btn-success' data-dismiss = "modal" onclick="updateProduct('${id}')" >Cập Nhật</button>
+        <button class='btn btn-success' data-dismiss = "modal" onclick="updateProduct()" >Cập Nhật</button>
       `;
     })
     .catch( err => {
@@ -191,7 +203,7 @@ let editProduct = id => {
 
 window.editProduct = editProduct;
 
-let updateProduct= id=> {
+let updateProduct= ()=> {
   let name = getELE("NamePhone").value;
   let price = getELE("gia").value;
   let screen = getELE("manHinh").value;
@@ -200,7 +212,7 @@ let updateProduct= id=> {
   let img = getELE("hinhAnh").value;
   let desc = getELE("moTa").value;
   let type = getELE("loaiDT").value;
-
+  
   let isValid = true;
  
   isValid &=
@@ -233,9 +245,9 @@ let updateProduct= id=> {
   );
   isValid &=
     validation.checkEmpty(desc, "tbMoTa", "Bạn chưa viết mô tả") &&
-    validation.checkLength(desc, "tbMoTa", "Mô tả nhập quá 60 ký tự");
+    validation.checkLength(desc, "tbMoTa", "Mô tả nhập ít hơn 60 ký tự");
 
-  if (isValid) {
+  if(isValid) {
     let sp = new Products(
       name,
       price,
@@ -246,10 +258,10 @@ let updateProduct= id=> {
       desc,
       type
     );
-    productSer
-      .capNhatSP(id, sp)
+    productSer.capNhatSP(id, sp)
       .then((result) => {
         getListProducts();
+        setLocalStorage();
         document.querySelector("#myModal .close").click();
       })
       .catch((err) => {
@@ -272,6 +284,7 @@ let resetForm=()=> {
   getELE("tbLoạiDT").innerHTML = "";
 }
 window.resetForm = resetForm;
+
 let search = () => {
   let keyword = getELE("inputTK").value;
   productSer.timSP().then(result => {
