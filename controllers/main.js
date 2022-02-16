@@ -31,7 +31,7 @@ function hienThiDS(mangSP) {
           content += `
          <div class="product-item">
                          <div class="product-img">
-                              <img src=${sp.img} alt="">
+                              <img class="img-fluid" src=${sp.img} alt="">
                          </div>
                          <div class="product-title">
                               <h3 class="product-name">${sp.name}</h3>
@@ -72,10 +72,6 @@ function onchangeSearch() {
                console.log(err);
           });
 }
-
-
-
-
 
 
 

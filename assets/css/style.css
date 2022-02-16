@@ -62,3 +62,7 @@ body a:hover{
           justify-content: space-between;
   padding: 1rem 9%;
 }
+#tbTenDT,#tbGiaDT,#tbManHinh,#tbCameraSau,#tbCameraTruoc,#tbHinh,#tbMoTa,#tbLoạiDT{
+  color: red;
+  font-size: 14px;
+}
