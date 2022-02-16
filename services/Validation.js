@@ -12,10 +12,10 @@ export default class Validation {
         return false;
     }
 
-    checkExist(value, spanID, message, mangSanPham) {
+    checkExist(value, spanID, message, mangSP) {
         let isExist = false;
-        isExist = mangSanPham.some(function(sp) {
-            return sp.tenSP == value;
+        isExist = mangSP.some(function(sp) {
+            return sp.name == value;
         })
 
         if(isExist) {
