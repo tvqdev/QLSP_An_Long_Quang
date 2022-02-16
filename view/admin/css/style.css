@@ -36,10 +36,13 @@ body {
 
 body a {
   text-decoration: none !important;
+  color: #fff;
 }
-.heading span {
-  color: #0984e3;
+body a:hover{
+  color: #fff;
+  opacity: 0.8;
 }
+
 .header {
   position: -webkit-sticky;
   position: sticky;
