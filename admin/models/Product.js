@@ -1,10 +1,13 @@
-function Products(_name,_price,_screen,_backCamera,_frontCamera,_img,_desc,_type ){
-     this.name = _name;
-     this.price = _price;
-     this.screen = _screen;
-     this.backCamera = _backCamera;
-     this.frontCamera = _frontCamera;
-     this.img = _img;
-     this.desc = _desc;
-     this.type = _type;
- }
+export default class Products{
+    constructor(nameSP,price,screen,backCamera,frontCamera,img,desc,type) {
+        this.name = nameSP;
+        this.price = price;
+        this.screen = screen;
+        this.backCamera = backCamera;
+        this.frontCamera = frontCamera;
+        this.img = img;
+        this.desc = desc;
+        this.type = type;
+    } 
+}
+

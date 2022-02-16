@@ -1,4 +1,11 @@
-var productSer = new ProductService();
+import Products from "../models/Product.js";
+import ProductService from "../services/ProductService.js";
+import Validation from "../services/Validation.js";
+
+let productSer = new ProductService();
+let validation = new Validation();
+let mangSP = [];
+
 function getELE(id) {
   return document.getElementById(id);
 }
@@ -11,26 +18,29 @@ function getListProducts() {
     .then(function (result) {
       console.log(result.data);
       renderTable(result.data);
-      // setLocalStorage(result.data);
+      let DSSP = result.data;
+      let mangInfoSP = DSSP.map((product) => {
+          let infoSP = {
+              id: product.id,
+              tenSP: product.name,
+          }
+          return infoSP;
+      })
+      localStorage.setItem("DSSP",JSON.stringify(mangInfoSP));
     })
     .catch(function (error) {
       console.log(error);
     });
-}
-
-function setLocalStorage(mangSP) {
-  localStorage.setItem("DSSP", JSON.stringify(mangSP));
-}
-
-function getLocalStorage() {
-  var mangKQ = JSON.parse(localStorage.getItem("DSSP"));
-  return mangKQ;
+    if(localStorage.getItem("DSSP") != null) {
+      mangSP = JSON.parse(localStorage.getItem("DSSP"));
+  }
 }
 
 function creatBtnAdd() {
   var footerEle = document.querySelector(".modal-footer");
   footerEle.innerHTML = `<button onclick = 'addProducts()' class = 'btn btn-primary'> Thêm Điện Thoại</button>`;
 }
+window.creatBtnAdd = creatBtnAdd;
 
 function renderTable(mangSP) {
   var content = "";
@@ -56,7 +66,7 @@ function renderTable(mangSP) {
   getELE("tbodyProducts").innerHTML = content;
 }
 
-function addProducts() {
+let addProducts=()=> {
   document.getElementById("NamePhone").disabled = false;
   var name = getELE("NamePhone").value;
 
@@ -68,53 +78,72 @@ function addProducts() {
   var desc = getELE("moTa").value;
   var type = getELE("loaiDT").value;
 
-  var sp = new Products(
-    name,
-    price,
-    screen,
-    backCamera,
-    frontCamera,
-    img,
-    desc,
-    type
-  );
+  let isValid = true;
+    isValid &= validation.checkEmpty(NamePhone,"tbTenDT","Tên điện thoại không được để trống")
+    && validation.checkExist(NamePhone,"tbTenDT","Tên điện thoại không được trùng",mangSP);
+    isValid &= validation.checkEmpty(gia,"tbGiaDT","Giá không được để trống")
+    && validation.checkPrice(gia,"tbGiaDT","Giá điện thoại phải lớn hơn 0");
+    isValid &= validation.checkEmpty(manHinh,"tbManHinh","Màn hình không được để trống");
+    isValid &= validation.checkEmpty(camSau,"tbCameraSau","Camera không được để trống");
+    isValid &= validation.checkEmpty(camTruoc,"tbCameraTruoc","Camera này không được để trống");
+    isValid &= validation.checkEmpty(hinhAnh,"tbHinh","Hình Ảnh này không được để trống");
+    isValid &= validation.checkSelect(loaiDT,"tbLoạiDT","Vui lòng Chọn điện thoại");
+    isValid &= validation.checkEmpty(moTa,"tbMoTa","Bạn chưa viết mô tả")
+    && validation.checkLength(moTa,"tbMoTa","Mô tả nhập quá 60 ký tự");
+    
+    // isValid &= validation.checkSelect("loaiDT","tbLoạiDT","Vui lòng Chọn điện thoại");
+    // isValid &=  validation.checkLength(moTa,"tbMoTa","Mô tả nhập quá 60 ký tự");
 
-  productSer
-    .themSP(sp)
-    .then(function (result) {
-      console.log(result);
-      // load lại sp khi thêm thành công
-      getListProducts();
-      document.querySelector("#myModal .close").click();
-    })
-    .catch(function (error) {
-      console.log(error);
-    });
+    if(isValid){
+      let sp = new Products(
+        name,
+        price,
+        screen,
+        backCamera,
+        frontCamera,
+        img,
+        desc,
+        type
+      );
+    
+      productSer
+        .themSP(sp)
+        .then( ()=> {
+          getListProducts();
+          document.querySelector("#myModal .close").click();
+        })
+        .catch( (err)=> {
+          console.log(err);
+        });
+    }
 }
+window.addProducts = addProducts;
 
 function deleteProduct(id){
     productSer.xoaSP(id)
-    .then(function(){
+    .then(()=>{
         getListProducts();
     })
-    .catch(function(error){
-        console.log(error);
+    .catch(function(err){
+        console.log(err);
     })
 }
+window.deleteProduct = deleteProduct;
 
-function editProduct(id){
+let editProduct= (id)=>{
   productSer.xemSP(id)
-  .then(function(result){   
-  getELE("NamePhone").value = result.data.name;
+  .then((result)=>{   
+    let {name,price,screen,backCamera,frontCamera,img,desc,type} = result.data;
+  getELE("NamePhone").value = name;
   getELE("NamePhone").disabled = true;
 
-  getELE("gia").value = result.data.price;
-  getELE("manHinh").value = result.data.screen;
-  getELE("camSau").value = result.data.backCamera;
-  getELE("camTruoc").value = result.data.frontCamera;
-  getELE("hinhAnh").value = result.data.img;
-  getELE("moTa").value = result.data.desc;
-  getELE("loaiDT").value = result.data.type;
+  getELE("gia").value = price;
+  getELE("manHinh").value = screen;
+  getELE("camSau").value = backCamera;
+  getELE("camTruoc").value = frontCamera;
+  getELE("hinhAnh").value = img;
+  getELE("moTa").value = desc;
+  getELE("loaiDT").value = type;
 
   document.querySelector("#myModal .modal-footer").innerHTML = `
         <button class='btn btn-success' data-dismiss = "modal" onclick="updateProduct('${id}')" >Cập Nhật</button>
@@ -125,36 +154,56 @@ function editProduct(id){
   });
 }
 
+window.editProduct = editProduct;
+
 function updateProduct(id){
 
-  var name = getELE("NamePhone").value;
-  var price = getELE("gia").value;
-  var screen = getELE("manHinh").value;
-  var backCamera = getELE("camSau").value;
-  var frontCamera = getELE("camTruoc").value;
-  var img = getELE("hinhAnh").value;
-  var desc = getELE("moTa").value;
-  var type = getELE("loaiDT").value;
+  let name = getELE("NamePhone").value;
+  let price = getELE("gia").value;
+  let screen = getELE("manHinh").value;
+  let backCamera = getELE("camSau").value;
+  let frontCamera = getELE("camTruoc").value;
+  let img = getELE("hinhAnh").value;
+  let desc = getELE("moTa").value;
+  let type = getELE("loaiDT").value;
 
-  var sp = new Products(
-    name,
-    price,
-    screen,
-    backCamera,
-    frontCamera,
-    img,
-    desc,
-    type
-  );
-  productSer.capNhatSP(id, sp)
-    .then(function(result){
-      getListProducts();
-      document.querySelector("#myModal .close").click()
-    })
-    .catch(function(err){
-      console.log(err);
-    });
+  let isValid = true;
+  isValid &= validation.checkEmpty(NamePhone,"tbTenDT","Tên điện thoại không được để trống")
+  && validation.checkExist(NamePhone,"tbTenDT","Tên điện thoại không được trùng",mangSP);
+  isValid &= validation.checkEmpty(gia,"tbGiaDT","Giá không được để trống")
+  && validation.checkPrice(gia,"tbGiaDT","Giá điện thoại phải lớn hơn 0");
+  isValid &= validation.checkEmpty(manHinh,"tbManHinh","Màn hình không được để trống");
+  isValid &= validation.checkEmpty(camSau,"tbCameraSau","Camera không được để trống");
+  isValid &= validation.checkEmpty(camTruoc,"tbCameraTruoc","Camera này không được để trống");
+  isValid &= validation.checkEmpty(hinhAnh,"tbHinh","Hình Ảnh này không được để trống");
+  isValid &= validation.checkSelect(loaiDT,"tbLoạiDT","Vui lòng Chọn điện thoại");
+  isValid &= validation.checkEmpty(moTa,"tbMoTa","Bạn chưa viết mô tả")
+  && validation.checkLength(moTa,"tbMoTa","Mô tả nhập quá 60 ký tự");
+
+  if(isValid){
+    var sp = new Products(
+      name,
+      price,
+      screen,
+      backCamera,
+      frontCamera,
+      img,
+      desc,
+      type
+    );
+    productSer.capNhatSP(id, sp)
+      .then((result)=>{
+        getListProducts();
+        document.querySelector("#myModal .close").click()
+      })
+      .catch((err)=>{
+        console.log(err);
+      });
+  }
+
 }
+window.updateProduct = updateProduct;
+
 function resetForm() {
   document.querySelector(".modal-body").reset();
   document.querySelector("#NamePhone").disabled = false;
@@ -166,8 +215,26 @@ function resetForm() {
   getELE("tbHinh").innerHTML = "";
   getELE("tbMoTa").innerHTML = "";
   getELE("tbLoạiDT").innerHTML = "";
-
 }
+
+let search=()=>{
+  let keyword = getELE('inpSearch').value;
+  productSer.timSP()
+  .then((result)=>{
+    let mangTK = [];
+    let mangDSSP = result.data;
+    let keywordLower = keyword.toLowerCase();
+    mangDSSP.map((sp)=>{
+      let nameLower = sp.name.toLowerCase();
+      let indexName = nameLower.indexOf(keywordLower);
+      if(indexName >-1){
+        mangTK.push(sp);
+      }
+    })
+    renderTable(mangTK);
+  })
+}
+getELE('textSearch').addEventListener("keyup",search);
 
 document.querySelector(".close").addEventListener("click", resetForm);
 document.querySelector("#myModal").addEventListener("click", function (e) {

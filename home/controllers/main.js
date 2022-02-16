@@ -1,11 +1,23 @@
 var sp = new ProductService();
-var dataProduct = [];
-var dataCart = [];
+var cart = [];
+var cartItem = {
+     product:{
+          id : 1,
+          price: 100,
+          name: 'samsung a10'
+     },
+     quanlity :1
+}
+var productList={
+
+}
 
 function getDataUI() {
      sp.getDataProduct()
           .then(function (result) {
                hienThiDS(result.data);
+               localStorage.setItem("productList", productList)
+               console.log(productList);
           })
           .catch(function (error) {
                console.log(error);
@@ -14,10 +26,8 @@ function getDataUI() {
 getDataUI();
 
 function hienThiDS(mangSP) {
-     console.log(mangSP);
      var content = "";
      mangSP.map(function (sp, index) {
-          // content = content + "col-4"
           content += `
          <div class="product-item">
                          <div class="product-img">
@@ -63,52 +73,63 @@ function onchangeSearch() {
           });
 }
 
-function addCart(id) {
-     var find_Products = findProduct(id);
-     var productCart = {
-          ...dataProduct[find_Products]
-     };
-     console.log("product: ", productCart);
-
-     if (dataCart.some((pr) => {
-          if (pr.product.id == id)
-               return true;
-     })) {
-          dataCart.map((pr) => {
-               if (pr.product.id == id) pr.quantity++;
-          })
-     } else {
-          let productItem = new Cart(productCart);
-          dataCart.push(productItem);
-     }
-     console.log(dataCart);
-}
-
-function findProduct(id) {
-     var find_Product = -1;
-     dataProduct.map((pr, i) => {
-          if (pr.id == id) find_Product = i;
-     });
-     return find_Product;
-}
 
 
-function Carts(mang) {
-     let content = "";
-     let count = 1;
-     mang.map(function (sp) {
-          content +=
-               `
-       <tr>
-               <td style="display: flex; align-items: center;"><img style="width: 70px;"
-                         src="${sp.product.img}"
-                         alt="">${sp.product.name}</td>
-               <td><input style="width: 30px; outline: none;" type="number" value="1" min="1"></td>
-               <td><span>$ ${sp.product.price}</span></td>
-               <td style="cursor: pointer;"><i class="fa fa-trash"></i></td>
-          </tr>
-         `;
-          count++;
-     });
-     document.querySelector("#tbody").innerHTML = content;
-};
+
+
+
+
+
+/**
+ * 
+ * 
+ function addCart(id) {
+      var find_Products = findProduct(id);
+      var productCart = {
+           ...dataProduct[find_Products]
+      };
+      console.log("product: ", productCart);
+ 
+      if (dataCart.some((pr) => {
+           if (pr.product.id == id)
+                return true;
+      })) {
+           dataCart.map((pr) => {
+                if (pr.product.id == id) pr.quantity++;
+           })
+      } else {
+           let productItem = new Cart(productCart);
+           dataCart.push(productItem);
+      }
+      console.log(dataCart);
+ }
+ 
+ function findProduct(id) {
+      var find_Product = -1;
+      dataProduct.map((pr, i) => {
+           if (pr.id == id) find_Product = i;
+      });
+      return find_Product;
+ }
+ 
+ 
+ function Carts(mang) {
+      let content = "";
+      let count = 1;
+      mang.map(function (sp) {
+           content +=
+                `
+        <tr>
+                <td style="display: flex; align-items: center;"><img style="width: 70px;"
+                          src="${sp.product.img}"
+                          alt="">${sp.product.name}</td>
+                <td><input style="width: 30px; outline: none;" type="number" value="1" min="1"></td>
+                <td><span>$ ${sp.product.price}</span></td>
+                <td style="cursor: pointer;"><i class="fa fa-trash"></i></td>
+           </tr>
+          `;
+           count++;
+      });
+      document.querySelector("#tbody").innerHTML = content;
+ };
+ */

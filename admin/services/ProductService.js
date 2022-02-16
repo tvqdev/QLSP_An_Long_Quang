@@ -1,13 +1,16 @@
+import Products from "../models/Product.js";
 
-function ProductService() {
-     this.layDSSP = function () {
+export default class ProductService {
+  constructor() {};
+
+     layDSSP () {
        return axios({
          method: "get",
          url: "https://61d03ed8cd2ee50017cc980b.mockapi.io/QLSP"
        });
      };
    
-     this.themSP = function (sp) {
+     themSP (sp) {
        return axios({
          method: "post",
          url: "https://61d03ed8cd2ee50017cc980b.mockapi.io/QLSP",
@@ -15,24 +18,30 @@ function ProductService() {
        });
      };
    
-     this.xoaSP = function(id){
+     xoaSP (id){
        return axios({
            method: "delete",
            url: `https://61d03ed8cd2ee50017cc980b.mockapi.io/QLSP/${id}`,
          });
      }
-     this.xemSP = function (id){
+     xemSP (id){
       return axios({
         method: "get",
         url: `https://61d03ed8cd2ee50017cc980b.mockapi.io/QLSP/${id}`,
       });
      };
-     this.capNhatSP = function(id, sp){
+     capNhatSP(id, sp){
       return axios({
         method: "put",
         url: `https://61d03ed8cd2ee50017cc980b.mockapi.io/QLSP/${id}`,
         data: sp,
       });
      };
+     timSP(){
+       return axios({
+         method: 'get',
+        url: `https://61d03ed8cd2ee50017cc980b.mockapi.io/QLSP`,
+       })
+     }
    }
    
