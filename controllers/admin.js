@@ -4,7 +4,7 @@ import Validation from "../services/Validation.js";
 
 let productSer = new ProductService();
 let validation = new Validation();
-let mangSP = [];
+let mangLocal = [];
 
 let getELE=(id)=> {
   return document.getElementById(id);
@@ -19,20 +19,20 @@ let getListProducts=()=> {
       console.log(result.data);
       renderTable(result.data);
       let DSSP = result.data;
-      let mangInfoSP = DSSP.map((product) => {
-        let infoSP = {
-          id: product.id,
-          tenSP: product.name,
+      let mangDSSP = DSSP.map((sp) => {
+        let infoProducts = {
+          id: sp.id,
+          name: sp.name
         };
-        return infoSP;
+        return infoProducts;
       });
-      localStorage.setItem("DSSP", JSON.stringify(mangInfoSP));
+      localStorage.setItem("DSSP", JSON.stringify(mangDSSP));
     })
     .catch( err=> {
       console.log(err);
     });
   if (localStorage.getItem("DSSP") != null) {
-    mangSP = JSON.parse(localStorage.getItem("DSSP"));
+    mangLocal = JSON.parse(localStorage.getItem("DSSP"));
   }
 }
 getListProducts();
@@ -92,7 +92,7 @@ let addProducts = () => {
       name,
       "tbTenDT",
       "Tên điện thoại không được trùng",
-      mangSP
+      mangLocal
     );
   isValid &=
     validation.checkEmpty(price, "tbGiaDT", "Giá không được để trống") &&
@@ -274,11 +274,11 @@ let resetForm=()=> {
 window.resetForm = resetForm;
 let search = () => {
   let keyword = getELE("inputTK").value;
-  productSer.timSP().then((result) => {
+  productSer.timSP().then(result => {
     let mangTK = [];
-    let mangDSSP = result.data;
+    let mangSP = result.data;
     let keywordLower = keyword.toLowerCase();
-    mangDSSP.map((sp) => {
+    mangSP.map((sp) => {
       let nameLower = sp.name.toLowerCase();
       let indexName = nameLower.indexOf(keywordLower);
       if (indexName > -1) {
