@@ -1,4 +1,4 @@
-import Products from "../models/Product";
+import Products from "../models/Products.js";
 
 export default class ProductService {
   constructor() {};

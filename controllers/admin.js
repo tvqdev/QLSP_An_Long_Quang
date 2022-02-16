@@ -1,4 +1,4 @@
-import Products from "../models/Product.js";
+import Products from "../models/Products.js";
 import ProductService from "../services/ProductService.js";
 import Validation from "../services/Validation.js";
 
@@ -6,16 +6,16 @@ let productSer = new ProductService();
 let validation = new Validation();
 let mangSP = [];
 
-function getELE(id) {
+let getELE=(id)=> {
   return document.getElementById(id);
 }
+window.getELE = getELE;
 
-getListProducts();
 
-function getListProducts() {
+let getListProducts=()=> {
   productSer
     .layDSSP()
-    .then(function (result) {
+    .then( (result)=> {
       console.log(result.data);
       renderTable(result.data);
       let DSSP = result.data;
@@ -28,24 +28,26 @@ function getListProducts() {
       });
       localStorage.setItem("DSSP", JSON.stringify(mangInfoSP));
     })
-    .catch(function (error) {
-      console.log(error);
+    .catch( err=> {
+      console.log(err);
     });
   if (localStorage.getItem("DSSP") != null) {
     mangSP = JSON.parse(localStorage.getItem("DSSP"));
   }
 }
+getListProducts();
+window.getListProducts = getListProducts;
 
-function creatBtnAdd() {
-  var footerEle = document.querySelector(".modal-footer");
+let creatBtnAdd=()=> {
+  let footerEle = document.querySelector("#myModal .modal-footer");
   footerEle.innerHTML = `<button onclick = 'addProducts()' class = 'btn btn-primary'> Thêm Điện Thoại</button>`;
 }
 window.creatBtnAdd = creatBtnAdd;
 
-function renderTable(mangSP) {
-  var content = "";
-  var count = 1;
-  mangSP.map(function (sp, index) {
+let renderTable = mangSP => {
+  let content = "";
+  let count = 1;
+  mangSP.map((sp, index)=> {
     content += `
         <tr>
             <td style='display:none'>${count}</td>          
@@ -67,16 +69,17 @@ function renderTable(mangSP) {
 }
 
 let addProducts = () => {
-  document.getElementById("NamePhone").disabled = false;
-  var name = getELE("NamePhone").value;
+  
+  let name = getELE("NamePhone").value;
+  getELE("NamePhone").disabled = false;
 
-  var price = getELE("gia").value;
-  var screen = getELE("manHinh").value;
-  var backCamera = getELE("camSau").value;
-  var frontCamera = getELE("camTruoc").value;
-  var img = getELE("hinhAnh").value;
-  var desc = getELE("moTa").value;
-  var type = getELE("loaiDT").value;
+  let price = getELE("gia").value;
+  let screen = getELE("manHinh").value;
+  let backCamera = getELE("camSau").value;
+  let frontCamera = getELE("camTruoc").value;
+  let img = getELE("hinhAnh").value;
+  let desc = getELE("moTa").value;
+  let type = getELE("loaiDT").value;
 
   let isValid = true;
   isValid &=
@@ -100,19 +103,19 @@ let addProducts = () => {
     "Màn hình không được để trống"
   );
   isValid &= validation.checkEmpty(
-    frontCamera,
+    backCamera,
     "tbCameraSau",
     "Camera không được để trống"
   );
   isValid &= validation.checkEmpty(
     frontCamera,
     "tbCameraTruoc",
-    "Camera này không được để trống"
+    "Camera không được để trống"
   );
   isValid &= validation.checkEmpty(
     img,
     "tbHinh",
-    "Hình Ảnh này không được để trống"
+    "Hình Ảnh không được để trống"
   );
   isValid &= validation.checkSelect(
     "loaiDT",
@@ -148,19 +151,19 @@ let addProducts = () => {
 };
 window.addProducts = addProducts;
 
-function deleteProduct(id) {
+let deleteProduct=id=> {
   productSer
     .xoaSP(id)
     .then(() => {
       getListProducts();
     })
-    .catch(function (err) {
+    .catch( err=> {
       console.log(err);
     });
 }
 window.deleteProduct = deleteProduct;
 
-let editProduct = (id) => {
+let editProduct = id => {
   productSer
     .xemSP(id)
     .then((result) => {
@@ -181,14 +184,14 @@ let editProduct = (id) => {
         <button class='btn btn-success' data-dismiss = "modal" onclick="updateProduct('${id}')" >Cập Nhật</button>
       `;
     })
-    .catch(function (err) {
+    .catch( err => {
       console.log(err);
     });
 };
 
 window.editProduct = editProduct;
 
-function updateProduct(id) {
+let updateProduct= id=> {
   let name = getELE("NamePhone").value;
   let price = getELE("gia").value;
   let screen = getELE("manHinh").value;
@@ -199,18 +202,7 @@ function updateProduct(id) {
   let type = getELE("loaiDT").value;
 
   let isValid = true;
-  isValid &=
-    validation.checkEmpty(
-      name,
-      "tbTenDT",
-      "Tên điện thoại không được để trống"
-    ) &&
-    validation.checkExist(
-      name,
-      "tbTenDT",
-      "Tên điện thoại không được trùng",
-      mangSP
-    );
+ 
   isValid &=
     validation.checkEmpty(price, "tbGiaDT", "Giá không được để trống") &&
     validation.checkPrice(price, "tbGiaDT", "Giá điện thoại phải lớn hơn 0");
@@ -220,19 +212,19 @@ function updateProduct(id) {
     "Màn hình không được để trống"
   );
   isValid &= validation.checkEmpty(
-    frontCamera,
+    backCamera,
     "tbCameraSau",
     "Camera không được để trống"
   );
   isValid &= validation.checkEmpty(
     frontCamera,
     "tbCameraTruoc",
-    "Camera này không được để trống"
+    "Camera không được để trống"
   );
   isValid &= validation.checkEmpty(
     img,
     "tbHinh",
-    "Hình Ảnh này không được để trống"
+    "Hình Ảnh không được để trống"
   );
   isValid &= validation.checkSelect(
     "loaiDT",
@@ -244,7 +236,7 @@ function updateProduct(id) {
     validation.checkLength(desc, "tbMoTa", "Mô tả nhập quá 60 ký tự");
 
   if (isValid) {
-    var sp = new Products(
+    let sp = new Products(
       name,
       price,
       screen,
@@ -267,9 +259,9 @@ function updateProduct(id) {
 }
 window.updateProduct = updateProduct;
 
-function resetForm() {
+let resetForm=()=> {
   document.querySelector(".modal-body").reset();
-  document.querySelector("#NamePhone").disabled = false;
+  getELE("NamePhone").disabled = false;
   getELE("tbTenDT").innerHTML = "";
   getELE("tbGiaDT").innerHTML = "";
   getELE("tbManHinh").innerHTML = "";
@@ -279,9 +271,9 @@ function resetForm() {
   getELE("tbMoTa").innerHTML = "";
   getELE("tbLoạiDT").innerHTML = "";
 }
-
+window.resetForm = resetForm;
 let search = () => {
-  let keyword = getELE("inpSearch").value;
+  let keyword = getELE("inputTK").value;
   productSer.timSP().then((result) => {
     let mangTK = [];
     let mangDSSP = result.data;
@@ -296,10 +288,12 @@ let search = () => {
     renderTable(mangTK);
   });
 };
-getELE("textSearch").addEventListener("keyup", search);
+// window.search = search;
+getELE("basic-addon2").addEventListener("click",search);
+getELE("inputTK").addEventListener("keyup",search);
 
 document.querySelector(".close").addEventListener("click", resetForm);
-document.querySelector("#myModal").addEventListener("click", function (e) {
+document.querySelector("#myModal").addEventListener("click",  (e)=> {
   if (e.target == e.currentTarget) {
     resetForm();
   }
