@@ -65,7 +65,6 @@ function onchangeSearch() {
                });
                if (arr2.length == 0) {
                     arr2 = [...arr];
-                    alert(`"không có ${seach}"`);
                }
                hienThiDS(arr2);
           }).catch((err) => {
