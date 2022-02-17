@@ -1,20 +1,23 @@
-// import Products from "../models/Product.js";
+// import Products from "../models/Products.js";
+
 import ProductService from "../services/ProductService.js";
+import CartItem from "../models/CartItem.js";
+import Cart from "../controllers/Cart.js";
 let sp = new ProductService();
+let cart = new Cart();
 
 
-let cart = [];
-let cartItem = {
-     product: {
-          id: 1,
-          price: 100,
-          name: 'samsung a10'
-     },
-     quanlity: 1
-}
+// let cart = [];
+// let cartItem = {
+//      product: {
+//           id: 1,
+//           price: 100,
+//           name: 'samsung a10'
+//      },
+//      quanlity: 1
+// }
 
 let productList = {
-
 }
 
 let getDataUI = () => {
@@ -66,7 +69,7 @@ let hienThiDS = (mangSP) => {
      document.getElementById("product-content").innerHTML = content;
 
 }
-
+// onchange sản phẩm
  let onchangeSearch =() =>{
      sp.layDSSP()
      .then((result) => {
@@ -90,57 +93,22 @@ let hienThiDS = (mangSP) => {
 document.getElementById("produc-sp").onclick = onchangeSearch;
 
 
-
-/**
- * 
- * 
- function addCart(id) {
-      let find_Products = findProduct(id);
-      let productCart = {
-           ...dataProduct[find_Products]
-      };
-      console.log("product: ", productCart);
+// them sản phẩm
+let themSP = (id) => {
+     sp.xemSP(id)
+         .then((result) => {
+             let arr_Cart = cart.arrCart;
+             if (arr_Cart.some((item) => item.id === id)) {
+                  result.quanlity++;
+             } else {
+                 let cartItem = new CartItem(id, result.data.name, result.data.price, result.data.img, 1);
+                 arr_Cart.push(cartItem);
+             }
+          
+         })
+         .catch((error) => {
+             console.log(error);
+         });
  
-      if (dataCart.some((pr) => {
-           if (pr.product.id == id)
-                return true;
-      })) {
-           dataCart.map((pr) => {
-                if (pr.product.id == id) pr.quantity++;
-           })
-      } else {
-           let productItem = new Cart(productCart);
-           dataCart.push(productItem);
-      }
-      console.log(dataCart);
  }
- 
- function findProduct(id) {
-      let find_Product = -1;
-      dataProduct.map((pr, i) => {
-           if (pr.id == id) find_Product = i;
-      });
-      return find_Product;
- }
- 
- 
- function Carts(mang) {
-      let content = "";
-      let count = 1;
-      mang.map(function (sp) {
-           content +=
-                `
-        <tr>
-                <td style="display: flex; align-items: center;"><img style="width: 70px;"
-                          src="${sp.product.img}"
-                          alt="">${sp.product.name}</td>
-                <td><input style="width: 30px; outline: none;" type="number" value="1" min="1"></td>
-                <td><span>$ ${sp.product.price}</span></td>
-                <td style="cursor: pointer;"><i class="fa fa-trash"></i></td>
-           </tr>
-          `;
-           count++;
-      });
-      document.querySelector("#tbody").innerHTML = content;
- };
- */
+window.themSP = themSP;
