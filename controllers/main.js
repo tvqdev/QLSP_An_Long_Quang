@@ -7,16 +7,6 @@ let sp = new ProductService();
 let cart = new Cart();
 
 
-// let cart = [];
-// let cartItem = {
-//      product: {
-//           id: 1,
-//           price: 100,
-//           name: 'samsung a10'
-//      },
-//      quanlity: 1
-// }
-
 let productList = {
 }
 
