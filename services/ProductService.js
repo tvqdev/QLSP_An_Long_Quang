@@ -34,7 +34,7 @@ export default class ProductService {
       return axios({
         method: "put",
         url: `https://61d03ed8cd2ee50017cc980b.mockapi.io/QLSP/${id}`,
-        data: sp,
+        data: sp
       });
      };
      timSP(){
