@@ -193,7 +193,7 @@ let editProduct = id => {
       getELE("loaiDT").value = type;
 
       document.querySelector("#myModal .modal-footer").innerHTML = `
-        <button class='btn btn-success' data-dismiss = "modal" onclick="updateProduct()" >Cập Nhật</button>
+        <button class='btn btn-success' onclick="updateProduct()" >Cập Nhật</button>
       `;
     })
     .catch( err => {
@@ -215,49 +215,22 @@ let updateProduct= ()=> {
   
   let isValid = true;
  
-  isValid &=
-    validation.checkEmpty(price, "tbGiaDT", "Giá không được để trống") &&
+  isValid &=validation.checkEmpty(price, "tbGiaDT", "Giá không được để trống") &&
     validation.checkPrice(price, "tbGiaDT", "Giá điện thoại phải lớn hơn 0");
-  isValid &= validation.checkEmpty(
-    screen,
-    "tbManHinh",
-    "Màn hình không được để trống"
-  );
-  isValid &= validation.checkEmpty(
-    backCamera,
-    "tbCameraSau",
-    "Camera không được để trống"
-  );
-  isValid &= validation.checkEmpty(
-    frontCamera,
-    "tbCameraTruoc",
-    "Camera không được để trống"
-  );
-  isValid &= validation.checkEmpty(
-    img,
-    "tbHinh",
-    "Hình Ảnh không được để trống"
-  );
-  isValid &= validation.checkSelect(
-    "loaiDT",
-    "tbLoạiDT",
-    "Vui lòng Chọn điện thoại"
-  );
-  isValid &=
-    validation.checkEmpty(desc, "tbMoTa", "Bạn chưa viết mô tả") &&
+  isValid &= validation.checkEmpty(screen,"tbManHinh","Màn hình không được để trống");
+  isValid &= validation.checkEmpty(backCamera,"tbCameraSau","Camera không được để trống");
+  isValid &= validation.checkEmpty(frontCamera,"tbCameraTruoc","Camera không được để trống");
+  isValid &= validation.checkEmpty(img,"tbHinh","Hình Ảnh không được để trống");
+  isValid &= validation.checkSelect("loaiDT","tbLoạiDT","Vui lòng Chọn điện thoại");
+  isValid &= validation.checkEmpty(desc, "tbMoTa", "Bạn chưa viết mô tả") &&
     validation.checkLength(desc, "tbMoTa", "Mô tả nhập ít hơn 60 ký tự");
-
+  let id ="";
+  mangLocal.map(sp=>{
+    if(name == sp.name)
+    return id = sp.id;
+  })
   if(isValid) {
-    let sp = new Products(
-      name,
-      price,
-      screen,
-      backCamera,
-      frontCamera,
-      img,
-      desc,
-      type
-    );
+    let sp = new Products(name,price,screen,backCamera,frontCamera,img,desc,type);
     productSer.capNhatSP(id, sp)
       .then((result) => {
         getListProducts();
