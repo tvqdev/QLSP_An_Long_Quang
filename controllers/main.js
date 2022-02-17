@@ -1,19 +1,24 @@
-var sp = new ProductService();
-var cart = [];
-var cartItem = {
-     product:{
-          id : 1,
+// import Products from "../models/Product.js";
+import ProductService from "../services/ProductService.js";
+let sp = new ProductService();
+
+
+let cart = [];
+let cartItem = {
+     product: {
+          id: 1,
           price: 100,
           name: 'samsung a10'
      },
-     quanlity :1
+     quanlity: 1
 }
-var productList={
+
+let productList = {
 
 }
 
-function getDataUI() {
-     sp.getDataProduct()
+let getDataUI = () => {
+     sp.layDSSP()
           .then(function (result) {
                hienThiDS(result.data);
                localStorage.setItem("productList", productList)
@@ -25,8 +30,8 @@ function getDataUI() {
 }
 getDataUI();
 
-function hienThiDS(mangSP) {
-     var content = "";
+let hienThiDS = (mangSP) => {
+     let content = "";
      mangSP.map(function (sp, index) {
           content += `
          <div class="product-item">
@@ -37,9 +42,20 @@ function hienThiDS(mangSP) {
                               <h3 class="product-name">${sp.name}</h3>
                               <p class="product-desc">
                               ${sp.desc}
-                              </p><div class="product-price">
-                              ${sp.price} <span>$</span>
+                              </p>
+                              <div class="product-price">
+                                   Price :   <span class="clr">${sp.price}</span> $
                               </div>
+                              
+                              <div class="product-screen">
+                              Screen :   <span class="clr">${sp.screen} 54</span> 
+                         </div>
+                         <div class="product-backCamera">
+                              Back Camera :    <span class="clr">${sp.backCamera}</span> 
+                         </div>
+                         <div class="product-frontCamera">
+                              Front Camera :   <span class="clr">${sp.frontCamera}</span> 
+                         </div>
                               <button class="product-btn" onclick="addCart(${sp.id})">
                                    Add to cart
                               </button>
@@ -51,28 +67,27 @@ function hienThiDS(mangSP) {
 
 }
 
-function onchangeSearch() {
-     var seach = document.getElementById("produc-sp").value;
-     let arr = [];
-     let arr2 = [];
-     sp.getDataProduct()
-          .then((result) => {
-               arr = [...result.data];
-               arr.map((sp, index) => {
-                    if (sp.type == seach) {
-                         arr2.push(arr[index]);
-                    }
-               });
-               if (arr2.length == 0) {
-                    arr2 = [...arr];
-                    alert(`"không có ${seach}"`);
-               }
-               hienThiDS(arr2);
-          }).catch((err) => {
-               console.log(err);
-          });
+ let onchangeSearch =() =>{
+     sp.layDSSP()
+     .then((result) => {
+         let seach = document.querySelector("#produc-sp").value;
+         let arr_new = [];
+         if (seach === "") {
+             arr_new = result.data;
+         } else {
+             result.data.map((product) => {
+                 if (product.type == seach) {
+                     arr_new.push(product);
+                 }
+             })
+         }
+         hienThiDS(arr_new);
+     })
+     .catch((error) => {
+         console.log(error);
+     });
 }
-
+document.getElementById("produc-sp").onclick = onchangeSearch;
 
 
 
@@ -80,8 +95,8 @@ function onchangeSearch() {
  * 
  * 
  function addCart(id) {
-      var find_Products = findProduct(id);
-      var productCart = {
+      let find_Products = findProduct(id);
+      let productCart = {
            ...dataProduct[find_Products]
       };
       console.log("product: ", productCart);
@@ -101,7 +116,7 @@ function onchangeSearch() {
  }
  
  function findProduct(id) {
-      var find_Product = -1;
+      let find_Product = -1;
       dataProduct.map((pr, i) => {
            if (pr.id == id) find_Product = i;
       });

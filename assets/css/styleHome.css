@@ -116,9 +116,21 @@ ul a:hover {
      text-transform: uppercase;
 }
 .product-price {
-     margin-top: auto;
+     margin-top: auto;   
+}
+.product-frontCamera {
      padding-bottom: 10px;
-     
+}
+.clr {
+     color: chocolate;
+}
+.product-backCamera {
+     display:-webkit-box;
+     -webkit-line-clamp:1;
+     -webkit-box-orient: vertical;
+     overflow: hidden;
+     text-overflow: ellipsis;
+     word-break: break-word;
 }
 .product-btn {
      width: 100%;

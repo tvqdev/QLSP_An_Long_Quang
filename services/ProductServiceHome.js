@@ -1,4 +1,4 @@
-function ProductService() {
+function ProductServices() {
      this.getDataProduct = function () {
           return axios({
                method: 'GET',
