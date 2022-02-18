@@ -7,13 +7,13 @@ let productList = [];
 
 let getDataUI = () => {
      sp.layDSSP()
-          .then(function (result) {
+          .then( result=> {
                hienThiDS(result.data);
                localStorage.setItem("productList", productList)
                productList = result.data;
                console.log(productList);
           })
-          .catch(function (error) {
+          .catch( error => {
                console.log(error);
           });
 }
@@ -21,7 +21,7 @@ getDataUI();
 
 let hienThiDS = (mangSP) => {
      let content = "";
-     mangSP.map(function (sp, index) {
+     mangSP.map( (sp, index) =>{
           content += `
          <div class="product-item">
                          <div class="product-img">
@@ -79,14 +79,15 @@ let onchangeSearch = () => {
 document.getElementById("produc-sp").onclick = onchangeSearch;
 
 
-let carts = JSON.parse(localStorage.getItem("CART")) || [];
+let carts = JSON.parse(localStorage.getItem("carts")) || [];
+
+
 upDateCart();
 
-function addToCart(id) {
-
+let addToCart=(id)=> {
      if (carts.some(item => item.id === id)) {
           carts.some(item => {
-               if (item.id === id){
+               if (item.id === id) {
                     item.quantity++;
                }
           })
@@ -97,7 +98,6 @@ function addToCart(id) {
                ...item,
                quantity: 1,
           });
-          
      }
      upDateCart();
 }
@@ -107,8 +107,7 @@ window.addToCart = addToCart;
 function upDateCart() {
      renderCartItem();
      renderToTal();
-
-     localStorage.setItem("CART", JSON.stringify(carts));
+     localStorage.setItem("carts", JSON.stringify(carts));
 }
 
 function renderCartItem() {
@@ -120,49 +119,100 @@ function renderCartItem() {
                     src=${item.img}
                     alt="">${item.name}</td>
                <td>
-                    <div class="btn minus" style="cursor: pointer" onclick="changeQuatity(${item.id})">-</div>
+                    <button type="button" class="btn minus" style="cursor: pointer" onclick="changeQuatityPlus('${item.id}')">+</button>
                     <div class="number">${item.quantity}</div>
-                    <div class="btn plus" style="cursor: pointer" onclick="changeQuatity(${item.id})">+</div>
+                    <button type="button" class="btn plus" style="cursor: pointer" onclick="changeQuatityMinus('${item.id}')">-</button>
                </td>
-               <td><span>$${item.price}</span></td>
-               <td style="cursor: pointer;"><i class="fa fa-trash"></i></td>
+               <td><span style="color:chocolate">$${item.price}</span></td>
+               <td>
+               <button class="icon-delete" type="button" onclick="deleteCart('${item.id}')">
+                    <i class="fa fa-trash"></i>
+               </button>
+               </td>
           </tr>                 
           `
      });
      document.getElementById("tbody").innerHTML = content;
 }
 
-function renderToTal(){
+function renderToTal() {
      let totalPrice = 0;
-
+     let totalItem = 0;
      carts.forEach((item) => {
           totalPrice += item.price * item.quantity;
+          totalItem += item.quantity;
      });
      document.getElementById("priceTotal").innerHTML = '$' + totalPrice;
+     document.getElementById('totalItem').innerHTML = totalItem;
 }
 
-function changeQuatity(action, id){
-     carts = carts.map((item) => {
-          let quantity = item.quantity;
-          if (item.id === id){
-               if(action === "minus" && quantity > 1){
-                    quantity++;
-                    
-               }
-               else if(action === "plus" && quantity < item.instock) {
-                    quantity--;
-                    
-               }
+let changeQuatityPlus = (id) => {
+     carts.map(cart => {
+          if (cart.id === id) {
+               cart.quantity++
           }
-          return {
-               ...item,
-               quantity,
-          };
-     });
+     })
      upDateCart();
 }
-window.changeQuatity = changeQuatity;
+let changeQuatityMinus = (id) => {
+     carts.map(cart => {
+          if (cart.id === id && cart.quantity > 1) {
+               cart.quantity--
+          }
+     })
+     upDateCart();
+}
+window.changeQuatityPlus = changeQuatityPlus
+window.changeQuatityMinus = changeQuatityMinus;
+
+let vitriSP=(id)=> {
+     let position = -1;
+     carts.map((cart, index) => {
+          if (cart.id === id) {
+               position = index
+          }
+     })
+     return position
+}
+window.vitriSP = vitriSP;
+
+let deleteCart=(id)=> {
+     let position = vitriSP(id)
+     if (position != -1) {
+          carts.splice(position, 1)
+     }
+     upDateCart();
+}
+window.deleteCart = deleteCart;
+
+document.getElementById("clearTotal").onclick =  ()=> {
+     carts = [];
+     upDateCart();
 
 
+}
+document.getElementById("purchase").onclick =  ()=> {  
+     if (carts.length > 0) {
+          Swal.fire({
+               title: 'Are you sure?',
+               // text: "Tổng tiền",
+               icon: 'warning',
+               showCancelButton: true,
+               confirmButtonColor: '#3085d6',
+               cancelButtonColor: '#d33',
+               confirmButtonText: 'Yes'
+          }).then((result) => {
+               if (result.isConfirmed) {
+                    carts = []
+                 Swal.fire(
+                   'Thanks for payment',
+                   '',
+                   'success'
+                 )
+               }
+               upDateCart();
+             })
+     }
+}
 
 

@@ -13,6 +13,8 @@
      <!-- font-awesome -->
      <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/5.15.4/css/all.min.css" />
 
+    <link rel="stylesheet" href="https://unpkg.com/swiper@7/swiper-bundle.min.css"/>
+
      <!-- Main -->
      <link rel="stylesheet" href="./assets/css/styleHome.css">
 </head>
@@ -27,11 +29,10 @@
                     <li><a href="#">Contact</a></li>
                </ul>
           </nav>
-          <div class="cart-icon">
-
+          <span class="cart-icon">
                <i class="fab fa-opencart"></i>
-
-          </div>
+               <div id="totalItem"></div>
+          </span>
      </header>
 
      <section class="product">
@@ -43,13 +44,11 @@
                          <option value="SAMSUNG">SAMSUNG</option>
                     </select>
                     <button class="manageProduct btn btn-primary">
-                         <a href="../view/admin/admin.html">Manage Products</a>
+                         <a href="./view/admin/admin.html">Manage Products</a>
                     </button>
                </div>
                <div class="product-content" id="product-content">
-
                     <div class="product-item">
-
                     </div>
                </div>
 
@@ -70,15 +69,15 @@
                               </tr>
                          </thead>
                          <tbody id="tbody">
-                              
+
                          </tbody>
                     </table>
                     <div style="text-align: right;" id="priceTotal">
                          <p style="font-weight: bold;">Total: <span></span></p>
                     </div>
                     <div class="cart-btn">
-                         <button>Purchase</button>
-                         <button>Clear Cart</button>
+                         <button type="button" id="purchase">Purchase</button>
+                         <button type="button" id="clearTotal">Clear Total</button>
                     </div>
                </form>
           </div>
@@ -89,14 +88,18 @@
      <footer>
 
      </footer>
+     <script src="https://cdnjs.cloudflare.com/ajax/libs/jquery/3.6.0/jquery.min.js"></script>
+
+    <script src="//cdn.jsdelivr.net/npm/sweetalert2@11"></script>
+     
+    <script src="https://unpkg.com/swiper@7/swiper-bundle.min.js"></script>
 
      <script src="https://cdn.jsdelivr.net/npm/axios/dist/axios.min.js"></script>
      <script src="https://unpkg.com/axios/dist/axios.min.js"></script>
      <!--  An -->
      <script src="./controllers/maincart.js"></script>
      <!-- ======= -->
-     <!-- <script type="module" src="./models/CartItem.js"></script> -->
-     <!-- <script src="./controllers/Cart.js"></script> -->
+     
      <script type="module" src="./controllers/main.js"></script>
 
 </body>
