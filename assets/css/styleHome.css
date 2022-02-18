@@ -258,3 +258,7 @@ select {
 .fa-trash{
      cursor: pointer;
 }
+footer{
+     background: #000;
+     height: 100px;
+}
