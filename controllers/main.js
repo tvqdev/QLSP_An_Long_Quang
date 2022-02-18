@@ -4,8 +4,13 @@ import ProductService from "../services/ProductService.js";
 let sp = new ProductService();
 
 
+<<<<<<< HEAD
 
 let productList = [];
+=======
+let productList = {
+}
+>>>>>>> refs/remotes/origin/main
 
 let getDataUI = () => {
      sp.layDSSP()
