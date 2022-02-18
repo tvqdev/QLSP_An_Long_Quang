@@ -1,30 +1,18 @@
-// import Products from "../models/Products.js";
 
 import ProductService from "../services/ProductService.js";
-import CartItem from "../models/CartItem.js";
-import Cart from "../controllers/Cart.js";
+
 let sp = new ProductService();
-let cart = new Cart();
 
 
-// let cart = [];
-// let cartItem = {
-//      product: {
-//           id: 1,
-//           price: 100,
-//           name: 'samsung a10'
-//      },
-//      quanlity: 1
-// }
 
-let productList = {
-}
+let productList = [];
 
 let getDataUI = () => {
      sp.layDSSP()
           .then(function (result) {
                hienThiDS(result.data);
                localStorage.setItem("productList", productList)
+               productList = result.data;
                console.log(productList);
           })
           .catch(function (error) {
@@ -59,7 +47,7 @@ let hienThiDS = (mangSP) => {
                          <div class="product-frontCamera">
                               Front Camera :   <span class="clr">${sp.frontCamera}</span> 
                          </div>
-                              <button class="product-btn" onclick="addCart(${sp.id})">
+                              <button class="product-btn" onclick="addToCart('${sp.id}')">
                                    Add to cart
                               </button>
                          </div>
@@ -70,45 +58,108 @@ let hienThiDS = (mangSP) => {
 
 }
 // onchange sản phẩm
- let onchangeSearch =() =>{
+let onchangeSearch = () => {
      sp.layDSSP()
-     .then((result) => {
-         let seach = document.querySelector("#produc-sp").value;
-         let arr_new = [];
-         if (seach === "") {
-             arr_new = result.data;
-         } else {
-             result.data.map((product) => {
-                 if (product.type == seach) {
-                     arr_new.push(product);
-                 }
-             })
-         }
-         hienThiDS(arr_new);
-     })
-     .catch((error) => {
-         console.log(error);
-     });
+          .then((result) => {
+               let seach = document.querySelector("#produc-sp").value;
+               let arr_new = [];
+               if (seach === "") {
+                    arr_new = result.data;
+               } else {
+                    result.data.map((product) => {
+                         if (product.type == seach) {
+                              arr_new.push(product);
+                         }
+                    })
+               }
+               hienThiDS(arr_new);
+          })
+          .catch((error) => {
+               console.log(error);
+          });
 }
 document.getElementById("produc-sp").onclick = onchangeSearch;
 
 
-// them sản phẩm
-let themSP = (id) => {
-     sp.xemSP(id)
-         .then((result) => {
-             let arr_Cart = cart.arrCart;
-             if (arr_Cart.some((item) => item.id === id)) {
-                  result.quanlity++;
-             } else {
-                 let cartItem = new CartItem(id, result.data.name, result.data.price, result.data.img, 1);
-                 arr_Cart.push(cartItem);
-             }
+let carts = JSON.parse(localStorage.getItem("CART")) || [];
+upDateCart();
+
+function addToCart(id) {
+
+     if (carts.some(item => item.id === id)) {
+          carts.some(item => {
+               if (item.id === id){
+                    item.quantity++;
+               }
+          })
+     }
+     else {
+          const item = productList.find(sp => sp.id === id);
+          carts.push({
+               ...item,
+               quantity: 1,
+          });
           
-         })
-         .catch((error) => {
-             console.log(error);
-         });
- 
- }
-window.themSP = themSP;
+     }
+     upDateCart();
+}
+
+window.addToCart = addToCart;
+
+function upDateCart() {
+     renderCartItem();
+     renderToTal();
+
+     
+}
+
+function renderCartItem() {
+     let content = "";
+     carts.forEach(item => {
+          content += `
+          <tr>
+               <td style="display: flex; align-items: center;"><img style="width: 70px;"
+                    src=${item.img}
+                    alt="">${item.name}</td>
+               <td>
+                    <div class="btn minus" style="cursor: pointer" onclick="changeQuatity(${item.id})">-</div>
+                    <div class="number">${item.quantity}</div>
+                    <div class="btn plus" style="cursor: pointer" onclick="changeQuatity(${item.id})">+</div>
+               </td>
+               <td><span>${item.price}</span></td>
+               <td style="cursor: pointer;"><i class="fa fa-trash"></i></td>
+          </tr>                 
+          `
+     });
+     document.getElementById("tbody").innerHTML = content;
+}
+
+function renderToTal(){
+     let totalPrice = 0;
+
+     carts.forEach((item) => {
+          totalPrice += item.price * item.quantity;
+     });
+     document.getElementById("priceTotal").innerHTML = totalPrice;
+}
+
+function changeQuatity(action, id){
+     carts = carts.map((item) => {
+          let quantity = item.quantity;
+          if(action === "minus" && quantity > 1){
+               quantity--;
+          }
+          else if(action === "plus" && quantity < item.instock) {
+               quantity++;
+          }
+     })
+     return {
+          ...item,
+          quantity,
+     };
+     upDateCart();
+}
+
+
+
+
