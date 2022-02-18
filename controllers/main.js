@@ -3,14 +3,7 @@ import ProductService from "../services/ProductService.js";
 
 let sp = new ProductService();
 
-
-<<<<<<< HEAD
-
 let productList = [];
-=======
-let productList = {
-}
->>>>>>> refs/remotes/origin/main
 
 let getDataUI = () => {
      sp.layDSSP()
@@ -115,7 +108,7 @@ function upDateCart() {
      renderCartItem();
      renderToTal();
 
-     
+     localStorage.setItem("CART", JSON.stringify(carts));
 }
 
 function renderCartItem() {
@@ -131,7 +124,7 @@ function renderCartItem() {
                     <div class="number">${item.quantity}</div>
                     <div class="btn plus" style="cursor: pointer" onclick="changeQuatity(${item.id})">+</div>
                </td>
-               <td><span>${item.price}</span></td>
+               <td><span>$${item.price}</span></td>
                <td style="cursor: pointer;"><i class="fa fa-trash"></i></td>
           </tr>                 
           `
@@ -145,25 +138,30 @@ function renderToTal(){
      carts.forEach((item) => {
           totalPrice += item.price * item.quantity;
      });
-     document.getElementById("priceTotal").innerHTML = totalPrice;
+     document.getElementById("priceTotal").innerHTML = '$' + totalPrice;
 }
 
 function changeQuatity(action, id){
      carts = carts.map((item) => {
           let quantity = item.quantity;
-          if(action === "minus" && quantity > 1){
-               quantity--;
+          if (item.id === id){
+               if(action === "minus" && quantity > 1){
+                    quantity++;
+                    
+               }
+               else if(action === "plus" && quantity < item.instock) {
+                    quantity--;
+                    
+               }
           }
-          else if(action === "plus" && quantity < item.instock) {
-               quantity++;
-          }
-     })
-     return {
-          ...item,
-          quantity,
-     };
+          return {
+               ...item,
+               quantity,
+          };
+     });
      upDateCart();
 }
+window.changeQuatity = changeQuatity;
 
 
 
